@@ -1,0 +1,135 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Monthly Healthcare Screenings (screenings per 1,000) - state view",
+  "width": 1000,
+  "height": 420,
+  "data": {
+    "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_screening_state(v2).csv",
+    "format": {"type": "csv"}
+  },
+  "params": [
+    {
+      "name": "selectedYear",
+      "value": 2024,
+      "bind": {"input": "range", "min": 2020, "max": 2024, "step": 1, "name": "Year: "}
+    },
+    {
+      "name": "selectedState",
+      "value": "Johor",
+      "bind": {
+        "input": "select",
+        "name": "State: ",
+        "options": [
+          "Johor",
+          "Kedah",
+          "Kelantan",
+          "Melaka",
+          "Negeri Sembilan",
+          "Pahang",
+          "Perak",
+          "Perlis",
+          "Pulau Pinang",
+          "Sabah",
+          "Sarawak",
+          "Selangor",
+          "Terengganu",
+          "W.P. Kuala Lumpur",
+          "W.P. Labuan",
+          "W.P. Putrajaya"
+        ]
+      }
+    }
+  ],
+  "transform": [
+    {"calculate": "timeParse(datum.month + ' ' + datum.year, '%b %Y')", "as": "date"},
+    {"calculate": "+datum['screening_rate (per 1000)']", "as": "screening_rate"},
+    {"filter": "datum.year == selectedYear && datum.state == selectedState"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "line", "point": true, "tooltip": true, "interpolate": "monotone"},
+      "encoding": {
+        "x": {
+          "field": "date",
+          "type": "temporal",
+          "timeUnit": "month",
+          "title": "Month"
+        },
+        "y": {
+          "field": "screening_rate",
+          "type": "quantitative",
+          "title": "Screenings per 1,000 people"
+        },
+        "color": {"value": "#1f77b4"},
+        "tooltip": [
+          {"field": "state", "type": "nominal", "title": "State"},
+          {"field": "year", "type": "ordinal", "title": "Year"},
+          {"field": "month", "type": "ordinal", "title": "Month"},
+          {"field": "screening", "type": "quantitative", "title": "Screenings"},
+          {"field": "screening_rate", "type": "quantitative", "title": "Rate (per 1,000)", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_screening_state(v2).csv",
+        "format": {"type": "csv"}
+      },
+      "transform": [
+        {"calculate": "timeParse(datum.month + ' ' + datum.year, '%b %Y')", "as": "date"},
+        {"calculate": "+datum['screening_rate (per 1000)']", "as": "screening_rate"},
+        {"filter": "datum.year == selectedYear && datum.state == selectedState"},
+        {"window": [{"op": "max", "field": "screening_rate", "as": "max_rate"}],"frame": [null, null]},
+        {"filter": "datum.screening_rate == datum.max_rate"}
+      ],
+      "mark": {
+        "type": "rule", 
+        "color": "firebrick", 
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "y": {
+          "field": "screening_rate", 
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_screening_state(v2).csv",
+        "format": {"type": "csv"}
+      },
+      "transform": [
+        {"calculate": "timeParse(datum.month + ' ' + datum.year, '%b %Y')", "as": "date"},
+        {"calculate": "+datum['screening_rate (per 1000)']", "as": "screening_rate"},
+        {"filter": "datum.year == selectedYear && datum.state == selectedState"},
+        {"window": [{"op": "max", "field": "screening_rate", "as": "max_rate"}],"frame": [null, null]},
+        {"filter": "datum.screening_rate == datum.max_rate"}
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "dy": -5,
+        "fontWeight": "bold",
+        "color": "firebrick"
+      },
+      "encoding": {
+        "x": {
+          "field": "date",
+          "type": "temporal",
+          "timeUnit": "month"
+        },
+        "y": {
+          "field": "screening_rate",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "screening_rate",
+          "type": "quantitative",
+          "format": ".1f"
+        }
+      }
+    }
+  ]
+}

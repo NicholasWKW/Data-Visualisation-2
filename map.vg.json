@@ -1,0 +1,96 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Population and Air Quality by District (2020-2024)",
+  "width": 800,
+  "height": 450,
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/malaysia.district.json",
+        "format": {"type": "topojson", "feature": "malaysia.district"}
+      },
+      "projection": {"type": "equirectangular"},
+      "transform": [
+        {
+          "lookup": "properties.name",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_population_district(v2).csv",
+              "format": {"type": "csv"}
+            },
+            "key": "district",
+            "fields": ["population", "date"]
+          },
+          "as": ["population_data", "population_date"],
+          "default": null
+        },
+        {
+          "lookup": "properties.name",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_pollutant_city(v3).csv",
+              "format": {"type": "csv"}
+            },
+            "key": "city",
+            "fields": ["avg_pollutant_value", "year"]
+          },
+          "as": ["pollution_value", "pollution_year"],
+          "default": -1
+        },
+        {"calculate": "datum.population_date ? year(datum.population_date) : null", "as": "population_year"},
+        {"calculate": "datum.pollution_value ? datum.pollution_value : -1", "as": "avg_pollutant_value"},
+        {"calculate": "datum.pollution_year == selectedYear ? datum.pollution_value : -1", "as": "current_year_pollution"},
+        {"calculate": "datum.current_year_pollution == -1 ? 'No pollution data' : datum.current_year_pollution", "as": "pollution_tooltip"}
+      ],
+      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.3},
+      "encoding": {
+        "color": {
+          "condition": {
+            "test": "datum.current_year_pollution == -1",
+            "value": "#eeeeee"
+          },
+          "field": "current_year_pollution",
+          "type": "quantitative",
+          "scale": {"scheme": "greens", "domain": [0,70]},
+          "title": "Air Quality (AQI)",
+          "legend": {
+            "orient": "right",
+            "titleAlign": "center",
+            "titleFontWeight": "bold",
+            "labelAlign": "center"
+          }
+        },
+        "tooltip": [
+          {"field": "properties.name", "title": "District"},
+          {"field": "population_data", "title": "Population (000s)", "format": ",.1f"},
+          {"field": "pollution_tooltip", "title": "Avg Pollution (AQI)", "format": ".1f"},
+          {"field": "selectedYear", "title": "Year"}
+        ]
+      }
+    },
+    {
+      "data": {
+        "graticule": {
+          "step": [4, 4]
+        }
+      },
+      "projection": {
+        "type": "equirectangular",
+        "scale": 1200
+      },
+      "mark": {"type": "geoshape", "fill": null, "stroke": "#aaaaaa", "strokeWidth": 0.3, "opacity": 0.5}
+    }
+  ],
+  "params": [
+    {
+      "name": "selectedYear",
+      "value": 2024,
+      "bind": {
+        "input": "range",
+        "min": 2020,
+        "max": 2024,
+        "step": 1
+      }
+    }
+  ]
+}
