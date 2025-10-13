@@ -1,0 +1,54 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Top States by Healthcare Screening Rate (2020-2024)",
+  "width": 500,
+  "height": 1000,
+  "data": {
+    "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_screening_state(v3).csv"
+  },
+  "transform": [
+    {
+      "window": [{"op": "rank", "as": "rank"}],
+      "sort": [{"field": "Sum of screening_rate (per 1000)", "order": "descending"}],
+      "groupby": ["year"]
+    },
+    {
+      "filter": "datum.rank <= 10"
+    },
+    {
+      "calculate": "datum.state + ' (' + datum.year + ')'",
+      "as": "state_year"
+    }
+  ],
+  "mark": {
+    "type": "bar",
+    "tooltip": true
+  },
+  "encoding": {
+    "y": {
+      "field": "state_year",
+      "type": "nominal",
+      "title": "State (Year)",
+      "sort": {"field": "Sum of screening_rate (per 1000)", "order": "descending"},
+      "axis": {"labelLimit": 150}
+    },
+    "x": {
+      "field": "Sum of screening_rate (per 1000)",
+      "type": "quantitative",
+      "title": "Health Screenings per 1,000 People"
+    },
+    "color": {
+      "field": "year",
+      "type": "ordinal",
+      "title": "Year"
+    },
+    "tooltip": [
+      {"field": "state", "type": "nominal", "title": "State"},
+      {"field": "year", "type": "ordinal", "title": "Year"},
+      {"field": "Sum of screening_rate (per 1000)", "type": "quantitative", "title": "Screenings/1k", "format": ".1f"},
+      {"field": "Sum of screening", "type": "quantitative", "title": "Total Screenings", "format": ","},
+      {"field": "rank", "type": "quantitative", "title": "Rank"}
+    ]
+  },
+  "config": {"view": {"stroke": null}}
+}
