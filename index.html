@@ -9,11 +9,108 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
     <script src="vega_lite_vis.js"></script>
     <link rel="stylesheet" href="style.css">
-    <title>Population & Air Quality Map</title>
+    <title>Air Quality & Public Health: Malaysia</title>
 </head>
-<div>
-    <h1>Health Care & Air Quality in Malaysia (2020-2024)</h1>
-    <div id="map_container"></div>
-    <div id="chart_container"></div>
-</div>
+<body>
+    <!-- Header Section -->
+    <header class="dashboard-header">
+        <div class="container">
+            <h1>Air Quality & Public Health in Malaysia (2020-2024)</h1>
+            <p class="subtitle">A Geospatial Analysis of Environmental Factors and Healthcare Outcomes</p>
+        </div>
+    </header>
+
+    <!-- Introduction Section -->
+    <section class="intro-section">
+        <div class="container">
+            <div class="intro-content">
+                <h2>Overview</h2>
+                <p>This dashboard explores the relationship between <strong>air quality metrics</strong> and <strong>public health indicators</strong> across Malaysian states from 2020 to 2024. The visualizations below provide insights into <strong>regional disparities</strong>, <strong>temporal trends</strong>, and potential correlations between environmental factors and healthcare utilization.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Dashboard Grid -->
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="dashboard-row-full-scroll">
+                <div class="viz-section">
+                    <div class="viz-header">
+                        <h3>Population, Air Quality, and Healthcare Screening by District (2020-2024)</h3>
+                        <p><strong>Interactive choropleth map</strong> showing air quality levels across Malaysian districts with <strong>overlay circles</strong> representing healthcare screening rates. Use the <strong>year slider</strong> to explore temporal patterns. <strong>Darker green shades</strong> indicate higher pollution concentrations, while <strong>larger circles</strong> show higher screening rates per 1,000 people.</p>
+                    </div>
+                    <div id="map_container" class="viz-container"></div>
+                </div>
+            </div>
+
+            <div class="dashboard-row-full-scroll">
+                <div class="viz-section">
+                    <div class="viz-header">
+                        <h3>Monthly Healthcare Screening Trends by State</h3>
+                        <p><strong>Interactive line chart</strong> showing monthly screening rates for selected states and years. The <strong>red line highlights the peak screening month</strong> with exact values displayed. Use <strong>dropdowns to compare different states</strong> and observe <strong>seasonal patterns</strong> in healthcare utilization.</p>
+                    </div>
+                    <div id="chart_container" class="viz-container"></div>
+                </div>
+            </div>
+
+            <!-- Row 2: Correlation and Rankings -->
+            <div class="dashboard-row-overflow">
+                <div class="viz-section">
+                    <div class="viz-header">
+                        <h3>Healthcare Screening Patterns by State (2020-2024)</h3>
+                        <p><strong>Bubble chart</strong> comparing healthcare screening rates across Malaysian states over time. <strong>Point size represents total screening volume</strong>, colors distinguish states, and tooltips display screening rates and volumes. Reveals which states <strong>consistently maintain high screening rates</strong> versus those with <strong>variable performance</strong> across different years.</p>
+                    </div>
+                    <div id="plot_container" class="viz-container"></div>
+                </div>
+
+                <div class="viz-section">
+                    <div class="viz-header">
+                        <h3>Top States by Healthcare Screening Rate</h3>
+                        <p><strong>Ranking of states</strong> with highest annual healthcare screening rates per 1,000 people. Shows <strong>top 10 performers each year</strong> with color coding by year and detailed ranking information in tooltips. Helps identify <strong>consistently high-performing states</strong> and <strong>year-to-year variations</strong>.</p>
+                    </div>
+                    <div id="bar_container" class="viz-container"></div>
+                </div>
+            </div>
+
+            <!-- Row 3: Small Multiples (Full Width) -->
+            <div class="dashboard-row-full-scroll">
+                <div class="viz-section">
+                    <div class="viz-header">
+                        <h3>State-wise Healthcare Screening Trends Comparison</h3>
+                        <p><strong>Small multiples visualization</strong> showing screening rate trends for all Malaysian states from 2020-2024. Each panel represents one state with <strong>independent y-axis scales</strong> to highlight within-state patterns. Allows <strong>comparison of trend shapes and magnitudes</strong> across different states simultaneously.</p>
+                    </div>
+                    <div id="sm_container" class="viz-container full-width"></div>
+                </div>
+            </div>
+
+            <!-- Insights Section -->
+            <section class="insights-section">
+                <div class="insights-content">
+                    <h2>Key Insights</h2>
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <h4>Regional Disparities</h4>
+                            <p><strong>Industrial and urban centers</strong> show consistently higher pollution levels, while <strong>East Malaysian states</strong> maintain better air quality but face <strong>healthcare access challenges</strong>.</p>
+                        </div>
+                        <div class="insight-card">
+                            <h4>Temporal Patterns</h4>
+                            <p>The <strong>COVID-19 pandemic period (2020-2021)</strong> significantly impacted screening rates, with <strong>recovery patterns varying by state and region</strong>.</p>
+                        </div>
+                        <div class="insight-card">
+                            <h4>Environmental Health</h4>
+                            <p>Preliminary analysis suggests <strong>complex relationships</strong> between air quality and healthcare utilization, requiring further investigation into <strong>confounding factors</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <div class="container">
+            <p>Data Sources: Department of Environment Malaysia, Ministry of Health Malaysia | Visualization: Vega-Lite</p>
+        </div>
+    </footer>
+</body>
 </html>
