@@ -1,8 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Population and Air Quality by District (2020-2024)",
-  "width": 800,
-  "height": 460,
+  "title": "Population, Air Quality, and Healthcare Screening by District (2020-2024)",
+  "width": 900,
+  "height": 450,
   "layer": [
     {
       "data": {
@@ -37,9 +37,9 @@
           "as": ["poll_2020", "poll_2021", "poll_2022", "poll_2023", "poll_2024"],
           "default": -1
         },
-        {"calculate": "selectedYear == 2020 ? datum.pop_2020 : selectedYear == 2021 ? datum.pop_2021 : selectedYear == 2022 ? datum.pop_2022 : selectedYear == 2023 ? datum.pop_2023 : datum.pop_2024", "as": "current_year_population"},
-        {"calculate": "selectedYear == 2020 ? datum.poll_2020 : selectedYear == 2021 ? datum.poll_2021 : selectedYear == 2022 ? datum.poll_2022 : selectedYear == 2023 ? datum.poll_2023 : datum.poll_2024", "as": "current_year_pollution"},
-        {"calculate": "selectedYear", "as": "display_year"},
+        {"calculate": "Year == 2020 ? datum.pop_2020 : Year == 2021 ? datum.pop_2021 : Year == 2022 ? datum.pop_2022 : Year == 2023 ? datum.pop_2023 : datum.pop_2024", "as": "current_year_population"},
+        {"calculate": "Year == 2020 ? datum.poll_2020 : Year == 2021 ? datum.poll_2021 : Year == 2022 ? datum.poll_2022 : Year == 2023 ? datum.poll_2023 : datum.poll_2024", "as": "current_year_pollution"},
+        {"calculate": "Year", "as": "display_year"},
         {"calculate": "datum.current_year_population == -1 ? 'No Data' : format(datum.current_year_population, '.1f')", "as": "population_tooltip"},
         {"calculate": "datum.current_year_pollution == -1 ? 'No Data' : format(datum.current_year_pollution, '.1f')", "as": "pollution_tooltip"}
       ],
@@ -56,7 +56,6 @@
           "title": "Air Quality (AQI)",
           "legend": {
             "orient": "right",
-            "titleAlign": "center",
             "titleFontWeight": "bold",
             "labelAlign": "center"
           }
@@ -65,6 +64,61 @@
           {"field": "properties.name", "title": "District"},
           {"field": "population_tooltip", "title": "Population (000s)"},
           {"field": "pollution_tooltip", "title": "Avg Pollution (AQI)"},
+          {"field": "display_year", "title": "Year"}
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_screening_state(v3).csv",
+        "format": {"type": "csv"}
+      },
+      "transform": [
+        {"filter": "datum.year == Year"},
+        {"filter": "datum['Sum of screening_rate (per 1000)'] != null"},
+        {
+          "calculate": "format(datum['Sum of screening'], ',.0f')",
+          "as": "screening_count_tooltip"
+        },
+        {
+          "calculate": "format(datum['Sum of screening_rate (per 1000)'], ',.1f')",
+          "as": "screening_rate_tooltip"
+        },
+        {"calculate": "Year", "as": "display_year"}
+      ],
+      "projection": {"type": "equirectangular"},
+      "mark": {
+        "type": "circle",
+        "stroke": "black",
+        "strokeWidth": 0.5,
+        "opacity": 0.7,
+        "fill": "blue"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "Max of longitude", 
+          "type": "quantitative",
+          "title": "Longitude"
+        },
+        "latitude": {
+          "field": "Max of latitude",
+          "type": "quantitative", 
+          "title": "Latitude"
+        },
+        "size": {
+          "field": "Sum of screening_rate (per 1000)",
+          "type": "quantitative",
+          "scale": {"range": [50, 300]},
+          "title": "Healthcare Screening Rate (per 1000)",
+          "legend": {
+            "orient": "right",
+            "titleFontWeight": "bold"
+          }
+        },
+        "tooltip": [
+          {"field": "state", "title": "State"},
+          {"field": "screening_count_tooltip", "title": "Screening Count"},
+          {"field": "screening_rate_tooltip", "title": "Screening Rate (per 1000)"},
           {"field": "display_year", "title": "Year"}
         ]
       }
@@ -84,7 +138,7 @@
   ],
   "params": [
     {
-      "name": "selectedYear",
+      "name": "Year",
       "value": 2024,
       "bind": {
         "input": "range",

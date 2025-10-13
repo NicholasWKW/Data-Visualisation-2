@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": "Healthcare Screening Patterns by State",
   "width": 350,
-  "height": 890,
+  "height": 950,
   "data": {
     "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_screening_state(v3).csv"
   },
@@ -41,7 +41,7 @@
       "field": "state",
       "type": "nominal",
       "title": "State",
-      "legend": {"orient": "bottom", "columns": 4}
+      "legend": {"orient": "right", "columns": 1}
     },
     "size": {
       "field": "Sum of screening",
@@ -53,8 +53,7 @@
       {"field": "state", "type": "nominal", "title": "State"},
       {"field": "year", "type": "ordinal", "title": "Year"},
       {"field": "Sum of screening_rate (per 1000)", "type": "quantitative", "title": "Screenings/1k", "format": ".1f"},
-      {"field": "Sum of screening", "type": "quantitative", "title": "Total Screenings", "format": ","},
-      {"field": "screening_rank", "type": "quantitative", "title": "Rank"}
+      {"field": "Sum of screening", "type": "quantitative", "title": "Total Screenings", "format": ","}
     ]
   },
   "config": {"view": {"stroke": null}}
