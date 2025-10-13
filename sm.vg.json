@@ -1,0 +1,56 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "State-wise Healthcare Screening Trends (2020-2024)",
+  "data": {
+    "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_screening_state(v3).csv"
+  },
+  "columns": 4,
+  "facet": {
+    "field": "state",
+    "type": "nominal"
+  },
+  "transform": [
+    {
+      "filter": "datum['Sum of screening_rate (per 1000)'] > 0"
+    }
+  ],
+  "spec": {
+    "width": 200,
+    "height": 150,
+    "layer": [
+      {
+        "mark": {
+          "type": "line",
+          "point": true,
+          "strokeWidth": 2,
+          "stroke": "steelblue"
+        },
+        "encoding": {
+          "x": {
+            "field": "year",
+            "type": "ordinal",
+            "title": null,
+            "axis": {"labelAngle": 0}
+          },
+          "y": {
+            "field": "Sum of screening_rate (per 1000)",
+            "type": "quantitative",
+            "title": null,
+            "scale": {"zero": false}
+          }
+        }
+      }
+    ],
+    "encoding": {
+      "tooltip": [
+        {"field": "state", "type": "nominal", "title": "State"},
+        {"field": "year", "type": "ordinal", "title": "Year"},
+        {"field": "Sum of screening_rate (per 1000)", "type": "quantitative", "title": "Screenings/1k", "format": ".1f"}
+      ]
+    }
+  },
+  "resolve": {
+    "scale": {"y": "independent"}
+  },
+  "config": {"view": {"stroke": null}}
+}
