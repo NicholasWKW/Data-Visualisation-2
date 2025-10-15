@@ -1,85 +1,99 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": "Top States by Healthcare Screening Rate (2020-2024)",
-  "width": 450,
+  "width": 430,
   "height": 1000,
   "data": {
     "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_screening_state(v3).csv",
     "format": {"type": "csv"}
   },
+  "params": [
+    {
+      "name": "year_select",
+      "select": {
+        "type": "point",
+        "fields": ["year_str"],
+        "on": "click",
+        "clear": false,
+        "toggle": true
+      },
+      "bind": "legend",
+      "value": [
+        {"year_str": "2020"},
+        {"year_str": "2021"},
+        {"year_str": "2022"},
+        {"year_str": "2023"},
+        {"year_str": "2024"}
+      ]
+    }
+  ],
   "transform": [
     {
       "calculate": "isNaN(datum['Sum of screening_rate (per 1000)']) ? 0 : datum['Sum of screening_rate (per 1000)']",
       "as": "screening_rate_numeric"
     },
     {
+      "calculate": "toString(datum.year)",
+      "as": "year_str"
+    },
+    {
       "window": [{"op": "rank", "as": "year_rank"}],
       "sort": [{"field": "screening_rate_numeric", "order": "descending"}],
-      "groupby": ["year"]
-    },
-    {
-      "window": [{"op": "count", "as": "total_entries"}]
-    },
-    {
-      "window": [{"op": "rank", "as": "overall_rank"}],
-      "sort": [{"field": "screening_rate_numeric", "order": "descending"}]
+      "groupby": ["year_str"]
     },
     {
       "filter": "datum.year_rank <= 10"
     },
     {
-      "calculate": "datum.state + ' (' + datum.year + ')'",
+      "calculate": "datum.state + ' (' + datum.year_str + ')'",
       "as": "state_year"
     },
     {
-      "calculate": "'Rank ' + datum.year_rank + ' in ' + datum.year",
+      "calculate": "'Rank ' + datum.year_rank + ' in ' + datum.year_str",
       "as": "rank_label"
     },
     {
-      "calculate": "'Overall: ' + datum.overall_rank + ' of ' + datum.total_entries",
-      "as": "overall_rank_label"
+      "filter": {"param": "year_select"}
     }
   ],
-  "layer": [
-    {
-      "mark": {
-        "type": "bar",
-        "tooltip": true
+  "mark": {
+    "type": "bar",
+    "tooltip": true
+  },
+  "encoding": {
+    "y": {
+      "field": "state_year", 
+      "type": "nominal",
+      "title": "State (Year)",
+      "sort": {"field": "screening_rate_numeric", "order": "descending"},
+      "axis": {"labelLimit": 150}
+    },
+    "x": {
+      "field": "screening_rate_numeric",
+      "type": "quantitative", 
+      "title": "Health Screenings per 1,000 People"
+    },
+    "color": {
+      "field": "year_str",
+      "type": "ordinal",
+      "title": "Year",
+      "scale": {
+        "domain": ["2020", "2021", "2022", "2023", "2024"],
+        "range": ["#3366cc", "#ff9900", "#990099", "#0099c6", "#dd4477"]
       },
-      "encoding": {
-        "y": {
-          "field": "state_year", 
-          "type": "nominal",
-          "title": "State (Year)",
-          "sort": {"field": "screening_rate_numeric", "order": "descending"},
-          "axis": {"labelLimit": 150}
-        },
-        "x": {
-          "field": "screening_rate_numeric",
-          "type": "quantitative", 
-          "title": "Health Screenings per 1,000 People"
-        },
-        "color": {
-          "field": "year",
-          "type": "ordinal",
-          "title": "Year",
-          "scale": {
-            "range": ["#3366cc", "#ff9900", "#990099", "#0099c6", "#dd4477"]
-          },
-          "legend": {
-            "title": "Year",
-            "orient": "right",
-            "direction": "vertical"
-          }
-        },
-        "tooltip": [
-          {"field": "state", "type": "nominal", "title": "State"},
-          {"field": "screening_rate_numeric", "type": "quantitative", "title": "Screenings Rate (per 1,000)", "format": ".1f"},
-          {"field": "Sum of screening", "type": "quantitative", "title": "Total Screenings", "format": ","},
-          {"field": "rank_label", "type": "nominal", "title": "Year Ranking"}
-        ]
+      "legend": {
+        "title": "Year (click to filter)",
+        "orient": "right",
+        "direction": "vertical"
       }
-    }
-  ],
+    },
+    "tooltip": [
+      {"field": "state", "type": "nominal", "title": "State"},
+      {"field": "year_str", "type": "ordinal", "title": "Year"},
+      {"field": "screening_rate_numeric", "type": "quantitative", "title": "Screenings Rate (per 1,000)", "format": ".1f"},
+      {"field": "Sum of screening", "type": "quantitative", "title": "Total Screenings", "format": ","},
+      {"field": "rank_label", "type": "nominal", "title": "Year Ranking"}
+    ]
+  },
   "config": {"view": {"stroke": null}}
 }
