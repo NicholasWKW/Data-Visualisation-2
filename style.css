@@ -20,7 +20,7 @@ body {
 
 /* Header Styles */
 .dashboard-header {
-  background: linear-gradient(135deg, #1b3aa0 0%, #2a2486 100%);
+  background: linear-gradient(135deg, #05207b 0%, #1c158b 100%);
   color: white;
   padding: 3rem 0;
   text-align: center;
@@ -28,6 +28,7 @@ body {
 }
 
 .dashboard-header h1 {
+  font-family: serif;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -47,6 +48,7 @@ body {
 }
 
 .intro-content h2 {
+  font-family: serif;
   font-size: 1.8rem;
   color: #1e293b;
   margin-bottom: 1rem;
@@ -64,6 +66,7 @@ body {
 /* Main Dashboard Layout */
 .dashboard-main {
   padding: 2rem 0;
+  background-color: #f8faff;
 }
 
 .dashboard-row-overflow {
@@ -137,6 +140,7 @@ body {
 }
 
 .viz-header h3 {
+  font-family: serif;
   font-size: 1.3rem;
   color: #1e293b;
   margin-bottom: 0.5rem;
@@ -260,6 +264,16 @@ body {
 .dashboard-footer p {
   font-size: 0.9rem;
   opacity: 0.8;
+}
+
+.dashboard-footer a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.dashboard-footer a:hover {
+    color: #2980b9;
+    text-decoration: underline;
 }
 
 /* Responsive Design */
