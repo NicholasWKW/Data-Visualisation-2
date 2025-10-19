@@ -1,7 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Healthcare Screening Patterns by State",
-  "width": 350,
+  "width": 330,
   "height": 950,
   "data": {
     "url": "https://raw.githubusercontent.com/NicholasWKW/Data-Visualisation-2/refs/heads/main/data/clean_screening_state(v3).csv"
@@ -42,12 +41,6 @@
       "type": "nominal",
       "title": "State",
       "legend": {"orient": "right", "columns": 1}
-    },
-    "size": {
-      "field": "Sum of screening",
-      "type": "quantitative",
-      "title": "Total Screenings",
-      "scale": {"range": [50, 300]}
     },
     "tooltip": [
       {"field": "state", "type": "nominal", "title": "State"},

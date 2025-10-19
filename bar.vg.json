@@ -1,6 +1,5 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Top States by Healthcare Screening Rate (2020-2024)",
   "width": 430,
   "height": 1000,
   "data": {

@@ -1,6 +1,5 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Population, Air Quality, and Healthcare Screening by District (2020-2024)",
   "width": 900,
   "height": 450,
   "layer": [
